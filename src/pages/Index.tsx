@@ -1,22 +1,27 @@
 import SerenityLogo from "@/components/SerenityLogo";
 import EnhancedTextInput from "@/components/EnhancedTextInput";
 import FeatureCard from "@/components/FeatureCard";
-import { CheckSquare, BookOpen, Search, HelpCircle, Monitor } from "lucide-react";
+import ThemeToggle from "@/components/ThemeToggle";
+import { CheckSquare, BookOpen, Search, HelpCircle } from "lucide-react";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header with icons */}
-      <header className="fixed top-0 right-0 p-6 flex gap-4 z-50">
-        <button className="w-10 h-10 rounded-lg bg-card/50 backdrop-blur-sm border border-border/50 flex items-center justify-center hover:bg-card transition-colors">
+      <header className="fixed top-0 right-0 p-6 flex gap-3 z-50">
+        <button 
+          className="w-10 h-10 rounded-lg bg-card/50 backdrop-blur-sm border border-border/50 flex items-center justify-center hover:bg-card hover:border-border transition-all"
+          aria-label="Search"
+        >
           <Search className="w-5 h-5 text-muted-foreground" />
         </button>
-        <button className="w-10 h-10 rounded-lg bg-card/50 backdrop-blur-sm border border-border/50 flex items-center justify-center hover:bg-card transition-colors">
+        <button 
+          className="w-10 h-10 rounded-lg bg-card/50 backdrop-blur-sm border border-border/50 flex items-center justify-center hover:bg-card hover:border-border transition-all"
+          aria-label="Help"
+        >
           <HelpCircle className="w-5 h-5 text-muted-foreground" />
         </button>
-        <button className="w-10 h-10 rounded-lg bg-card/50 backdrop-blur-sm border border-border/50 flex items-center justify-center hover:bg-card transition-colors">
-          <Monitor className="w-5 h-5 text-muted-foreground" />
-        </button>
+        <ThemeToggle />
       </header>
 
       {/* Main content */}

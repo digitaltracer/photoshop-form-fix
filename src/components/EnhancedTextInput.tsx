@@ -23,13 +23,15 @@ const EnhancedTextInput = () => {
           />
           
           {/* Bottom info bar */}
-          <div className="border-t border-border/50 px-8 py-4 bg-card/30 backdrop-blur-sm flex items-center justify-between">
-            <p className="text-sm text-muted-foreground">
-              Just write like you speak. We'll interpret it into a task or a journal entry, and fill in tags, priority, and due dates automatically.
-            </p>
-            <span className="text-xs px-3 py-1.5 rounded-full bg-primary/10 text-primary border border-primary/20">
-              Provider: gemini
-            </span>
+          <div className="border-t border-border/50 px-8 py-4 bg-card/30 backdrop-blur-sm">
+            <div className="flex items-center justify-between gap-4">
+              <p className="text-sm text-muted-foreground flex-1">
+                Just write like you speak. We'll interpret it into a task or a journal entry, and fill in tags, priority, and due dates automatically.
+              </p>
+              <span className="text-xs px-3 py-1.5 rounded-full bg-primary/10 text-primary border border-primary/20 whitespace-nowrap shrink-0">
+                Provider: gemini
+              </span>
+            </div>
           </div>
         </div>
       </div>
