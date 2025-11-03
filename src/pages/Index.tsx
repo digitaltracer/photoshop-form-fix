@@ -3,7 +3,7 @@ import SerenityLogo from "@/components/SerenityLogo";
 import EnhancedTextInput from "@/components/EnhancedTextInput";
 import FeatureCard from "@/components/FeatureCard";
 import ThemeToggle from "@/components/ThemeToggle";
-import { CheckSquare, BookOpen, Search, HelpCircle, Sparkles } from "lucide-react";
+import { CheckSquare, BookOpen, Search, HelpCircle, Sparkles, FileText } from "lucide-react";
 
 const Index = () => {
   return (
@@ -46,7 +46,7 @@ const Index = () => {
           </div>
 
           {/* Feature cards */}
-          <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             <FeatureCard
               icon={CheckSquare}
               title="ActionHub"
@@ -59,6 +59,14 @@ const Index = () => {
               description="Capture thoughts, ideas, and reflections with a private, secure journaling system."
               delay="0.2s"
             />
+            <Link to="/summary" className="block">
+              <FeatureCard
+                icon={FileText}
+                title="Summary"
+                description="View AI-generated summaries of your tasks and journal entries over time."
+                delay="0.3s"
+              />
+            </Link>
           </div>
         </div>
       </main>
