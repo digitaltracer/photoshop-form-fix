@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, Calendar as CalendarIcon, Clock, Sparkles, Tag } from "lucide-react";
+import { ArrowLeft, Calendar as CalendarIcon, Clock, Sparkles, Tag, CheckSquare, BookOpen } from "lucide-react";
 import { Link } from "react-router-dom";
 import { format, subDays, startOfMonth, endOfMonth, subMonths } from "date-fns";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -217,32 +217,56 @@ const Summary = () => {
               {/* Content Type Selection */}
               <div className="space-y-3">
                 <Label>Include Content</Label>
-                <div className="flex flex-col gap-3">
-                  <div className="flex items-center space-x-2">
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div 
+                    className={cn(
+                      "flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all",
+                      includeTasks 
+                        ? "border-primary bg-primary/5" 
+                        : "border-border bg-card hover:border-border/80"
+                    )}
+                    onClick={() => setIncludeTasks(!includeTasks)}
+                  >
                     <Checkbox
                       id="tasks"
                       checked={includeTasks}
                       onCheckedChange={(checked) => setIncludeTasks(checked as boolean)}
+                      className="pointer-events-none"
                     />
-                    <Label
-                      htmlFor="tasks"
-                      className="text-sm font-normal cursor-pointer"
-                    >
-                      Tasks from ActionHub
-                    </Label>
+                    <div className="flex items-center gap-2 flex-1">
+                      <CheckSquare className="w-4 h-4 text-primary" />
+                      <Label
+                        htmlFor="tasks"
+                        className="text-sm font-medium cursor-pointer pointer-events-none"
+                      >
+                        Tasks from ActionHub
+                      </Label>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div 
+                    className={cn(
+                      "flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all",
+                      includeJournal 
+                        ? "border-primary bg-primary/5" 
+                        : "border-border bg-card hover:border-border/80"
+                    )}
+                    onClick={() => setIncludeJournal(!includeJournal)}
+                  >
                     <Checkbox
                       id="journal"
                       checked={includeJournal}
                       onCheckedChange={(checked) => setIncludeJournal(checked as boolean)}
+                      className="pointer-events-none"
                     />
-                    <Label
-                      htmlFor="journal"
-                      className="text-sm font-normal cursor-pointer"
-                    >
-                      Journal Entries
-                    </Label>
+                    <div className="flex items-center gap-2 flex-1">
+                      <BookOpen className="w-4 h-4 text-primary" />
+                      <Label
+                        htmlFor="journal"
+                        className="text-sm font-medium cursor-pointer pointer-events-none"
+                      >
+                        Journal Entries
+                      </Label>
+                    </div>
                   </div>
                 </div>
               </div>
