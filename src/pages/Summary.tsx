@@ -22,6 +22,7 @@ const mockSummaries = [
     timeRange: "Nov 25 - Dec 1, 2025",
     generatedDate: "Dec 1, 2025 at 11:30 PM",
     category: "tasks",
+    tags: ["productivity", "planning", "meetings", "roadmap", "workflow", "time-management", "deliverables", "team", "Q4", "optimization"],
     wordCount: 89
   },
   {
@@ -334,6 +335,15 @@ const Summary = () => {
                         {summary.wordCount} words
                       </span>
                     </div>
+                    {summary.tags && summary.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 pt-2">
+                        {summary.tags.map((tag, index) => (
+                          <Badge key={index} variant="outline" className="text-xs px-2 py-0.5">
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
