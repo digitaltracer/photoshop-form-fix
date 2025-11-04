@@ -1,10 +1,17 @@
 import { useState } from "react";
-import { ArrowLeft, Calendar, Clock, Sparkles, Tag } from "lucide-react";
+import { ArrowLeft, Calendar as CalendarIcon, Clock, Sparkles, Tag } from "lucide-react";
 import { Link } from "react-router-dom";
+import { format, subDays, startOfMonth, endOfMonth, subMonths } from "date-fns";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 
 // Mock data - will be replaced with real data later
 const mockSummaries = [
@@ -39,6 +46,38 @@ const mockSummaries = [
 
 const Summary = () => {
   const [selectedCategory, setSelectedCategory] = useState<"all" | "tasks" | "journal">("all");
+  const [startDate, setStartDate] = useState<Date>();
+  const [endDate, setEndDate] = useState<Date>();
+  const [includeTasks, setIncludeTasks] = useState(true);
+  const [includeJournal, setIncludeJournal] = useState(true);
+
+  const handleQuickDateSelect = (type: "7days" | "30days" | "lastMonth" | "thisMonth") => {
+    const today = new Date();
+    switch (type) {
+      case "7days":
+        setStartDate(subDays(today, 7));
+        setEndDate(today);
+        break;
+      case "30days":
+        setStartDate(subDays(today, 30));
+        setEndDate(today);
+        break;
+      case "lastMonth":
+        const lastMonth = subMonths(today, 1);
+        setStartDate(startOfMonth(lastMonth));
+        setEndDate(endOfMonth(lastMonth));
+        break;
+      case "thisMonth":
+        setStartDate(startOfMonth(today));
+        setEndDate(today);
+        break;
+    }
+  };
+
+  const handleGenerateSummary = () => {
+    // TODO: Implement AI summary generation
+    console.log("Generate summary", { startDate, endDate, includeTasks, includeJournal });
+  };
 
   const filteredSummaries = selectedCategory === "all" 
     ? mockSummaries 
@@ -72,6 +111,154 @@ const Summary = () => {
       {/* Main content */}
       <main className="container mx-auto px-6 py-8">
         <div className="max-w-4xl mx-auto space-y-6">
+          {/* Generate New Summary */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-primary" />
+                Generate New Summary
+              </CardTitle>
+              <CardDescription>
+                Select a date range and content type to generate an AI summary
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Date Range Selection */}
+              <div className="space-y-4">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label>Start Date</Label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !startDate && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {startDate ? format(startDate, "PPP") : <span>Pick a date</span>}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={startDate}
+                          onSelect={setStartDate}
+                          initialFocus
+                          className="pointer-events-auto"
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>End Date</Label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !endDate && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {endDate ? format(endDate, "PPP") : <span>Pick a date</span>}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={endDate}
+                          onSelect={setEndDate}
+                          initialFocus
+                          className="pointer-events-auto"
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                </div>
+
+                {/* Quick Date Buttons */}
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => handleQuickDateSelect("7days")}
+                  >
+                    Last 7 Days
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => handleQuickDateSelect("30days")}
+                  >
+                    Last 30 Days
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => handleQuickDateSelect("lastMonth")}
+                  >
+                    Last Month
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => handleQuickDateSelect("thisMonth")}
+                  >
+                    This Month
+                  </Button>
+                </div>
+              </div>
+
+              {/* Content Type Selection */}
+              <div className="space-y-3">
+                <Label>Include Content</Label>
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="tasks"
+                      checked={includeTasks}
+                      onCheckedChange={(checked) => setIncludeTasks(checked as boolean)}
+                    />
+                    <Label
+                      htmlFor="tasks"
+                      className="text-sm font-normal cursor-pointer"
+                    >
+                      Tasks from ActionHub
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="journal"
+                      checked={includeJournal}
+                      onCheckedChange={(checked) => setIncludeJournal(checked as boolean)}
+                    />
+                    <Label
+                      htmlFor="journal"
+                      className="text-sm font-normal cursor-pointer"
+                    >
+                      Journal Entries
+                    </Label>
+                  </div>
+                </div>
+              </div>
+
+              {/* Generate Button */}
+              <Button
+                className="w-full"
+                onClick={handleGenerateSummary}
+                disabled={!startDate || !endDate || (!includeTasks && !includeJournal)}
+              >
+                <Sparkles className="mr-2 h-4 w-4" />
+                Generate Summary
+              </Button>
+            </CardContent>
+          </Card>
+
           {/* Filters */}
           <div className="flex gap-2 flex-wrap">
             <Badge 
@@ -111,12 +298,12 @@ const Summary = () => {
                   </div>
                   <CardDescription className="space-y-2">
                     <div className="flex items-center gap-4 text-xs flex-wrap">
-                      <span className="flex items-center gap-1.5">
+                     <span className="flex items-center gap-1.5">
                         <Clock className="w-3.5 h-3.5" />
                         {summary.timeRange}
                       </span>
                       <span className="flex items-center gap-1.5">
-                        <Calendar className="w-3.5 h-3.5" />
+                        <CalendarIcon className="w-3.5 h-3.5" />
                         Generated {summary.generatedDate}
                       </span>
                       <span className="text-muted-foreground">
